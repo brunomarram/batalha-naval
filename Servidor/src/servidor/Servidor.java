@@ -19,54 +19,40 @@ import model.Tabuleiro;
  */
 public class Servidor {
 
-    Tabuleiro jogador1;
-    Tabuleiro jogador2;
-    static final int PORT = 50000;
-    
-    public static void main(String[] args) {
-        try {
-            // Instancia o ServerSocket ouvindo a porta 12345
-            ServerSocket socket = new ServerSocket(PORT);
-            System.out.println("Servidor ouvindo a porta "+PORT);
-            Servidor server = new Servidor();
-            while(true) {
-                // o método accept() bloqueia a execução até que
-                // o servidor receba um pedido de conexão
-                Socket cliente = socket.accept();
-                System.out.println("Cliente conectado: " + cliente.getInetAddress().getHostAddress());
-                String message = server.listen(cliente);
-                server.call(message.split(":")[0], message.split(":")[1]);
-                cliente.close();
-            }  
-        }   
-        catch(Exception e) {
-           System.out.println("Erro: " + e.getMessage());
-        }  
-    }
+    public Socket cliente;
+    private Tabuleiro jogador1;
+    private Tabuleiro jogador2;
     
     public void call(String method, String params){
+        String[] data;
         switch(method) {
             case "start":
-                String[] data = params.split(",");
-                int shipSize = Integer.parseInt(data[1]);
-                int tabSize = Integer.parseInt(data[0]);
+                data = params.split(",");
+                int shipSize = Integer.parseInt(data[0]);
+                int tabSize = Integer.parseInt(data[1]);
                 int numberOfShips = new Random().nextInt(tabSize);
                 int tentatives = new Random().nextInt(numberOfShips*tabSize);
                 this.jogador1 = new Tabuleiro(shipSize, tabSize, numberOfShips, tentatives);
-                this.jogador1 = new Tabuleiro(shipSize, tabSize, numberOfShips, tentatives);
+                this.jogador2 = new Tabuleiro(shipSize, tabSize, numberOfShips, tentatives);
+                System.out.println(this.jogador1.toString());
+                break;
+            case "play":
+                data = params.split(",");
+                int Y = Integer.parseInt(data[1]);
+                this.jogador1.checkPlay(data[0].charAt(0), Y);
                 System.out.println(this.jogador1.toString());
                 break;
         }
     }
     
-    public String listen(Socket cliente) throws Exception {
+    public String listen() throws Exception {
         ObjectInputStream entrada = new ObjectInputStream(cliente.getInputStream());
         String message = (String) entrada.readObject();
         entrada.close();
         return message;
     }
     
-    public void write(Socket cliente, String message) throws Exception {
+    public void write(String message) throws Exception {
         ObjectOutputStream saida = new ObjectOutputStream(cliente.getOutputStream());
         saida.flush();
         saida.writeObject(message);
