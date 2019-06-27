@@ -5,7 +5,12 @@
  */
 package views;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
 import javax.swing.JOptionPane;
+import static views.Jogo.PORT;
 
 /**
  *
@@ -13,11 +18,41 @@ import javax.swing.JOptionPane;
  */
 public class Inicio extends javax.swing.JFrame {
     
+    static final int PORT = 50000;
+    private Socket cliente;
+    private ObjectInputStream entrada;
+    private ObjectOutputStream saida;
+    
     /**
      * Creates new form Início
      */
     public Inicio() {
         initComponents();
+        
+        try {
+            InetAddress host = InetAddress.getLocalHost();
+            cliente = new Socket(host.getHostName(), PORT);
+            this.send("checkStatus:.");
+            String response = this.listen();
+            
+            if(response.equals("Iniciar Jogo")){
+                this.jStart.setEnabled(true);
+                this.jShipSize.setEnabled(true);
+                this.jSize.setEnabled(true);                
+                this.jConnect.setEnabled(false);
+            } else {
+                this.jConnect.setEnabled(true);
+                this.jStart.setEnabled(false);
+                this.jShipSize.setEnabled(false);
+                this.jSize.setEnabled(false);
+            }
+            
+            saida.close();
+            entrada.close();
+        } catch (Exception ex) {
+            System.out.println("Erro: "+ex);
+            JOptionPane.showMessageDialog(rootPane, ex.getMessage(), null, JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -39,6 +74,7 @@ public class Inicio extends javax.swing.JFrame {
         jShipSize = new javax.swing.JSpinner();
         jStart = new javax.swing.JButton();
         jExit = new javax.swing.JButton();
+        jConnect = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -67,27 +103,40 @@ public class Inicio extends javax.swing.JFrame {
             }
         });
 
+        jConnect.setText("Conectar");
+        jConnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jConnectActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(16, 16, 16)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
                                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel5)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jShipSize))))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jStart)
-                            .addGap(92, 92, 92)
-                            .addComponent(jExit)
-                            .addGap(45, 45, 45)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(jStart)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jConnect)
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jShipSize)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(jExit))))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,7 +175,8 @@ public class Inicio extends javax.swing.JFrame {
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jStart)
-                    .addComponent(jExit))
+                    .addComponent(jExit)
+                    .addComponent(jConnect))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -153,6 +203,12 @@ public class Inicio extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, ex.getMessage(), null, JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jStartActionPerformed
+
+    private void jConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jConnectActionPerformed
+        Jogo game = new Jogo();
+        game.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jConnectActionPerformed
 
     /**
      * @param args the command line arguments
@@ -191,6 +247,7 @@ public class Inicio extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jConnect;
     private javax.swing.JButton jExit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -202,4 +259,15 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JTextField jSize;
     private javax.swing.JButton jStart;
     // End of variables declaration//GEN-END:variables
+    
+    private void send(String message) throws Exception{
+        saida = new ObjectOutputStream(cliente.getOutputStream());
+        saida.writeObject(message);
+    }
+
+    public String listen() throws Exception {
+        entrada = new ObjectInputStream(cliente.getInputStream());
+        String message = (String) entrada.readObject();
+        return message;
+    }
 }

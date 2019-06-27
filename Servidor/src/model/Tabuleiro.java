@@ -13,7 +13,6 @@ import java.util.Random;
  * @author brunomarrademelo
  */
 public class Tabuleiro {
-    private String ip;
     private int shipSize;
     private int tabSize;
     private int [][] jogo;
@@ -81,10 +80,6 @@ public class Tabuleiro {
             game += "\n";
         }
         return game;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
     }
 
     public int getShipSize() {
