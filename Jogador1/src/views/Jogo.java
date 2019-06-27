@@ -7,8 +7,12 @@ package views;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -18,6 +22,8 @@ public class Jogo extends javax.swing.JFrame {
     
     static final int PORT = 50000;
     private Socket cliente;
+    private ObjectInputStream entrada;
+    private ObjectOutputStream saida;
     
     public Jogo() {
         initComponents();
@@ -264,9 +270,15 @@ public class Jogo extends javax.swing.JFrame {
     private javax.swing.JButton jServerConnect;
     // End of variables declaration//GEN-END:variables
 
-    private void connectServer(int shipSize, int tabSize) {
+    private void connectServer(int shipSize, int tabSize) {        
         try {
+            InetAddress host = InetAddress.getLocalHost();
+            cliente = new Socket(host.getHostName(), PORT);
             this.send("start:"+shipSize+","+tabSize);
+            String response = this.listen();
+            this.createTable(response);
+            saida.close();
+            entrada.close();
         } catch (Exception ex) {
             System.out.println("Erro: "+ex);
             JOptionPane.showMessageDialog(rootPane, ex.getMessage(), null, JOptionPane.ERROR_MESSAGE);
@@ -274,26 +286,32 @@ public class Jogo extends javax.swing.JFrame {
     }
     
     private void send(String message) throws Exception{
-        cliente = new Socket("localhost", PORT);
-        ObjectOutputStream saida = new ObjectOutputStream(cliente.getOutputStream());
-        saida.flush();
+        saida = new ObjectOutputStream(cliente.getOutputStream());
         saida.writeObject(message);
-        saida.close();
     }
 
     public String listen() throws Exception {
-        cliente = new Socket("localhost", PORT);
-        ObjectInputStream entrada = new ObjectInputStream(cliente.getInputStream());
+        entrada = new ObjectInputStream(cliente.getInputStream());
         String message = (String) entrada.readObject();
-        System.out.println(message);
-        entrada.close();
         return message;
     }
-    
-    
-    //ObjectInputStream entrada = new ObjectInputStream(cliente.getInputStream());
-    //System.out.println(entrada.readObject());
-    //entrada.close();
-    //System.out.println("Conexão encerrada");
+
+    private void createTable(String tabuleiro) {
+        tabuleiro = tabuleiro.replace("0", "~");
+        tabuleiro = tabuleiro.replace("1", "()");
+        String [] columns = tabuleiro.split("\n");
+        String [][] splited = new String[columns.length][columns.length];
+        for(int i = 0; i < columns.length; i++) {
+            splited[i] = columns[i].split(" ");
+        }
+        
+        for(int i = 0; i < columns.length; i++) {
+            char column = (char) (65 + i);
+            columns[i] = Character.toString(column);
+        }
+        
+        jPlayer1 = new JTable(splited, columns);
+        jScrollPane1.setViewportView(jPlayer1);
+    }
     
 }

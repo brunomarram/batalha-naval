@@ -13,6 +13,7 @@ import java.util.Random;
  * @author brunomarrademelo
  */
 public class Tabuleiro {
+    private String ip;
     private int shipSize;
     private int tabSize;
     private int [][] jogo;
@@ -54,16 +55,13 @@ public class Tabuleiro {
         this.generateGame();
     }
 
-    public int checkPlay(char line, int column) {
+    public void checkPlay(char line, int column) {
         int X = 67 - line;
         int Y =  column - 1;
-        System.out.println(X +""+ Y);
         this.jogoView[X][Y] = "X";
-        return this.jogo[X][Y];
     }
 
-    @Override
-    public String toString() {
+    public String justView() {
         String game = "";
         for(int i = 0; i < this.tabSize; i++){
             for(int j = 0; j < this.tabSize; j++) {
@@ -72,5 +70,36 @@ public class Tabuleiro {
             game += "\n";
         }
         return game;
+    }
+
+    public String getMap() {
+        String game = "";
+        for(int i = 0; i < this.tabSize; i++){
+            for(int j = 0; j < this.tabSize; j++) {
+                game += this.jogo[i][j] + " ";
+            }
+            game += "\n";
+        }
+        return game;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public int getShipSize() {
+        return shipSize;
+    }
+
+    public int getTabSize() {
+        return tabSize;
+    }
+
+    public int getNumberOfShips() {
+        return numberOfShips;
+    }
+
+    public int getTentatives() {
+        return tentatives;
     }
 }

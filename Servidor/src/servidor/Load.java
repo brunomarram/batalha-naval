@@ -1,28 +1,26 @@
 package servidor;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 
 public class Load {
-    static final int PORT = 50000;
+    private static int port = 50000;
 
-    public static void main(String[] args) {
-        try {
-            // Instancia o ServerSocket ouvindo a porta 50000
-            ServerSocket socket = new ServerSocket(PORT);
-            System.out.println("Servidor ouvindo a porta "+PORT);
-            Servidor server = new Servidor();
-            while(true) {
-                // o método accept() bloqueia a execução até que
-                // o servidor receba um pedido de conexão
-                server.cliente = socket.accept();
-                System.out.println("Cliente conectado: " + server.cliente.getInetAddress().getHostAddress());
-                String message = server.listen();
-                server.call(message.split(":")[0], message.split(":")[1]);
-                server.cliente.close();
-            }
-        }
-        catch(Exception e) {
-            System.out.println("Erro: " + e.getMessage());
+    public static void main(String args[]) throws IOException, ClassNotFoundException, Exception{
+        //create the socket server object
+        ServerSocket server = new ServerSocket(port);
+        Servidor servidor = new Servidor();
+        //keep listens indefinitely until receives 'exit' call or program terminates
+        while(true){
+            System.out.println("Esperando um cliente");
+            servidor.cliente = server.accept();
+
+            String response = servidor.listen();
+            servidor.write(response);
+
+            servidor.entrada.close();
+            servidor.saida.close();
+            servidor.cliente.close();
         }
     }
 }
