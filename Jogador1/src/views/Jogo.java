@@ -28,6 +28,18 @@ public class Jogo extends javax.swing.JFrame {
     public Jogo() {
         initComponents();
         this.connectServer();
+        this.jNewGame.setEnabled(false);
+        this.controlGame();
+    }
+
+    private void unblock() {
+        this.jLog.setText("Faça o seu ataque!!");
+        this.jPlay1.setEnabled(true);
+    }
+    
+    private void block() {
+        this.jLog.setText("Aguardando outro jogador...");
+        this.jPlay1.setEnabled(false);        
     }
     
     /**
@@ -36,8 +48,44 @@ public class Jogo extends javax.swing.JFrame {
     public Jogo(int shipSize, int tabSize) {
         initComponents();
         this.createServer(shipSize, tabSize);
+        this.block();        
+
+        this.jNewGame.setEnabled(false);
+        this.controlGame();
     }
 
+    public void controlGame() {
+        try{
+            String message = this.listen();
+            
+            if(message.equals("play")) {
+                this.unblock();
+            } else if(message.equals("wait")){
+                this.block();                
+            } else {
+                //Condições de parar o game
+            }
+            
+            String myPoints = this.listen();
+            String myTentatives = this.listen();
+            String enemyPoints = this.listen();
+            String enemyTentatives = this.listen();
+            String meuTabuleiro = this.listen();
+            String enemyTabuleiro = this.listen();
+            
+            this.myPoints.setText(myPoints);
+            this.myTentatives.setText(myTentatives);
+            this.enemyPoints.setText(enemyPoints);
+            this.enemyTentatives.setText(enemyTentatives);            
+            this.createTable(meuTabuleiro, jScrollPane1, jPlayer1);
+            this.createTable(enemyTabuleiro, jScrollPane2, jPlayer2);
+            
+            if(message.equals("wait")) this.controlGame();
+        } catch(Exception ex) {
+
+        }       
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -52,11 +100,19 @@ public class Jogo extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jPlayer1 = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        myPoints = new javax.swing.JLabel();
+        myTentatives = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jPlayer2 = new javax.swing.JTable();
-        jLabel2 = new javax.swing.JLabel();
-        jServerConnect = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        enemyPoints = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        enemyTentatives = new javax.swing.JLabel();
+        jNewGame = new javax.swing.JButton();
         jQuit = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLog = new javax.swing.JLabel();
@@ -80,10 +136,23 @@ public class Jogo extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jPlayer1.setShowGrid(false);
         jScrollPane1.setViewportView(jPlayer1);
 
         jLabel3.setFont(new java.awt.Font("Lucida Sans Typewriter", 1, 14)); // NOI18N
         jLabel3.setText("Eu");
+
+        jLabel4.setFont(new java.awt.Font("Lucida Sans Typewriter", 1, 12)); // NOI18N
+        jLabel4.setText("Pontos:");
+
+        jLabel5.setFont(new java.awt.Font("Lucida Sans Typewriter", 1, 12)); // NOI18N
+        jLabel5.setText("Tentativas Restantes:");
+
+        myPoints.setFont(new java.awt.Font("Lucida Sans Typewriter", 1, 12)); // NOI18N
+        myPoints.setText("0");
+
+        myTentatives.setFont(new java.awt.Font("Lucida Sans Typewriter", 1, 12)); // NOI18N
+        myTentatives.setText("0");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -91,11 +160,19 @@ public class Jogo extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 453, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 453, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(22, 22, 22)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(myPoints, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(myTentatives, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -105,9 +182,14 @@ public class Jogo extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5)
+                    .addComponent(myPoints)
+                    .addComponent(myTentatives))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 498, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -126,32 +208,62 @@ public class Jogo extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(jPlayer2);
 
-        jLabel2.setFont(new java.awt.Font("Lucida Sans", 1, 14)); // NOI18N
-        jLabel2.setText("Meu Inimigo");
+        jLabel8.setFont(new java.awt.Font("Lucida Sans Typewriter", 1, 14)); // NOI18N
+        jLabel8.setText("Meu Inimigo");
+
+        jLabel9.setFont(new java.awt.Font("Lucida Sans Typewriter", 1, 12)); // NOI18N
+        jLabel9.setText("Pontos:");
+
+        enemyPoints.setFont(new java.awt.Font("Lucida Sans Typewriter", 1, 12)); // NOI18N
+        enemyPoints.setText("0");
+
+        jLabel11.setFont(new java.awt.Font("Lucida Sans Typewriter", 1, 12)); // NOI18N
+        jLabel11.setText("Tentativas Restantes:");
+
+        enemyTentatives.setFont(new java.awt.Font("Lucida Sans Typewriter", 1, 12)); // NOI18N
+        enemyTentatives.setText("0");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(549, 549, 549))
-            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 4, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(enemyPoints, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
+                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(enemyTentatives, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addComponent(jLabel2)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel11)
+                    .addComponent(enemyPoints)
+                    .addComponent(enemyTentatives))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane2)
+                .addContainerGap())
         );
 
-        jServerConnect.setText("Iniciar Jogo");
+        jNewGame.setText("Iniciar Novo Jogo");
+        jNewGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jNewGameActionPerformed(evt);
+            }
+        });
 
         jQuit.setText("Sair do Jogo");
         jQuit.addActionListener(new java.awt.event.ActionListener() {
@@ -162,9 +274,14 @@ public class Jogo extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/views/logo.jpeg"))); // NOI18N
 
-        jLog.setText("Aguardando outro jogador conectar...");
+        jLog.setText("Faça o seu ataque!!");
 
         jPlay1.setText("Realizar Jogada");
+        jPlay1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPlay1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -172,21 +289,27 @@ public class Jogo extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPlay1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jQuit))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jPlay1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jQuit))
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(77, 77, 77)
+                                .addComponent(jNewGame)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(92, 92, 92)
                         .addComponent(jLog)
-                        .addGap(37, 37, 37))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jServerConnect)
-                        .addGap(102, 102, 102)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 508, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -199,10 +322,10 @@ public class Jogo extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jNewGame)
+                        .addGap(57, 57, 57)
                         .addComponent(jLog)
-                        .addGap(48, 48, 48)
-                        .addComponent(jServerConnect)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jPlay1)
@@ -218,12 +341,8 @@ public class Jogo extends javax.swing.JFrame {
 
     private void jQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jQuitActionPerformed
         try {
-            InetAddress host = InetAddress.getLocalHost();
-            cliente = new Socket(host.getHostName(), PORT);
             this.send("reset:.");
             this.listen();
-            saida.close();
-            entrada.close();
             
             Inicio inicio = new Inicio();
             inicio.setVisible(true);
@@ -233,6 +352,22 @@ public class Jogo extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, ex.getMessage(), null, JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jQuitActionPerformed
+
+    private void jNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNewGameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jNewGameActionPerformed
+
+    private void jPlay1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPlay1ActionPerformed
+        try{
+            int x = jPlayer2.getSelectedRow() + 1;
+            int y = jPlayer2.getSelectedColumn();
+            char coord = (char) (y + 65);
+            this.send("play:"+coord+","+x);
+            this.controlGame();
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+        }
+    }//GEN-LAST:event_jPlay1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -270,10 +405,17 @@ public class Jogo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel enemyPoints;
+    private javax.swing.JLabel enemyTentatives;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLog;
+    private javax.swing.JButton jNewGame;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JButton jPlay1;
@@ -283,18 +425,13 @@ public class Jogo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JButton jServerConnect;
+    private javax.swing.JLabel myPoints;
+    private javax.swing.JLabel myTentatives;
     // End of variables declaration//GEN-END:variables
 
     private void createServer(int shipSize, int tabSize) {        
         try {
-            InetAddress host = InetAddress.getLocalHost();
-            cliente = new Socket(host.getHostName(), PORT);
             this.send("start:"+shipSize+","+tabSize);
-            String response = this.listen();
-            this.createTable(response);
-            saida.close();
-            entrada.close();
         } catch (Exception ex) {
             System.out.println("Erro: "+ex);
             JOptionPane.showMessageDialog(rootPane, ex.getMessage(), null, JOptionPane.ERROR_MESSAGE);
@@ -302,6 +439,8 @@ public class Jogo extends javax.swing.JFrame {
     }
     
     private void send(String message) throws Exception{
+        InetAddress host = InetAddress.getLocalHost();
+        cliente = new Socket(host.getHostName(), PORT);        
         saida = new ObjectOutputStream(cliente.getOutputStream());
         saida.writeObject(message);
     }
@@ -312,9 +451,11 @@ public class Jogo extends javax.swing.JFrame {
         return message;
     }
 
-    private void createTable(String tabuleiro) {
+    private void createTable(String tabuleiro, JScrollPane pane, JTable table) {
         tabuleiro = tabuleiro.replace("0", "~");
         tabuleiro = tabuleiro.replace("1", "()");
+        tabuleiro = tabuleiro.replace("2", "X");
+        tabuleiro = tabuleiro.replace("3", "o");
         String [] columns = tabuleiro.split("\n");
         String [][] splited = new String[columns.length][columns.length];
         for(int i = 0; i < columns.length; i++) {
@@ -326,19 +467,23 @@ public class Jogo extends javax.swing.JFrame {
             columns[i] = Character.toString(column);
         }
         
-        jPlayer1 = new JTable(splited, columns);
-        jScrollPane1.setViewportView(jPlayer1);
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setNumRows(0);
+        model.setColumnIdentifiers(columns);
+        
+        for(String[] row : splited){
+            model.addRow(row);
+        }
+        
+        table.setRowSelectionAllowed(true);
+        table.setColumnSelectionAllowed(true);
+        table.setCellSelectionEnabled(true);
+        pane.setViewportView(table);
     }
 
     private void connectServer() {
         try {
-            InetAddress host = InetAddress.getLocalHost();
-            cliente = new Socket(host.getHostName(), PORT);
             this.send("connect:.");
-            String response = this.listen();
-            this.createTable(response);
-            saida.close();
-            entrada.close();
         } catch (Exception ex) {
             System.out.println("Erro: "+ex);
             JOptionPane.showMessageDialog(rootPane, ex.getMessage(), null, JOptionPane.ERROR_MESSAGE);

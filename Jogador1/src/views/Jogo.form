@@ -34,25 +34,35 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jPlay1" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="jQuit" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="jLabel1" alignment="1" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="77" max="-2" attributes="0"/>
+                              <Component id="jNewGame" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="jPlay1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jQuit" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="jLabel1" alignment="1" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="-2" pref="92" max="-2" attributes="0"/>
                       <Component id="jLog" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="jServerConnect" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="102" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel2" min="-2" pref="508" max="-2" attributes="0"/>
+              <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -68,10 +78,10 @@
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jNewGame" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
                       <Component id="jLog" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
-                      <Component id="jServerConnect" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jPlay1" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -103,13 +113,21 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel3" max="32767" attributes="0"/>
-                      </Group>
                       <Component id="jScrollPane1" min="-2" pref="453" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+                          <Component id="jLabel3" min="-2" pref="79" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jLabel4" min="-2" pref="53" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="myPoints" min="-2" pref="37" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="jLabel5" min="-2" pref="159" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="myTentatives" min="-2" pref="61" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Component id="jSeparator1" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -122,9 +140,15 @@
               </Group>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" min="-2" pref="380" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="myPoints" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="myTentatives" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" min="-2" pref="498" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -150,6 +174,7 @@
                     <Column editable="true" title="Title 4" type="java.lang.Object"/>
                   </Table>
                 </Property>
+                <Property name="showGrid" type="boolean" value="false"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -160,6 +185,38 @@
               <Font name="Lucida Sans Typewriter" size="14" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Eu"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel4">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Sans Typewriter" size="12" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Pontos:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel5">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Sans Typewriter" size="12" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Tentativas Restantes:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="myPoints">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Sans Typewriter" size="12" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="0"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="myTentatives">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Sans Typewriter" size="12" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="0"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -176,14 +233,22 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="549" max="-2" attributes="0"/>
-              </Group>
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jScrollPane2" min="-2" pref="500" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="4" max="32767" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jLabel8" min="-2" pref="95" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="jLabel9" min="-2" pref="53" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="enemyPoints" min="-2" pref="37" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                  <Component id="jLabel11" min="-2" pref="159" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="enemyTentatives" min="-2" pref="61" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -191,10 +256,16 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="enemyPoints" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="enemyTentatives" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="jScrollPane2" min="-2" pref="380" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -221,20 +292,55 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JLabel" name="jLabel2">
+        <Component class="javax.swing.JLabel" name="jLabel8">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Lucida Sans" size="14" style="1"/>
+              <Font name="Lucida Sans Typewriter" size="14" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Meu Inimigo"/>
           </Properties>
         </Component>
+        <Component class="javax.swing.JLabel" name="jLabel9">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Sans Typewriter" size="12" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Pontos:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="enemyPoints">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Sans Typewriter" size="12" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="0"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel11">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Sans Typewriter" size="12" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Tentativas Restantes:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="enemyTentatives">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Sans Typewriter" size="12" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="0"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="jServerConnect">
+    <Component class="javax.swing.JButton" name="jNewGame">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Iniciar Jogo"/>
+        <Property name="text" type="java.lang.String" value="Iniciar Novo Jogo"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jNewGameActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jQuit">
       <Properties>
@@ -253,13 +359,16 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLog">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Aguardando outro jogador conectar..."/>
+        <Property name="text" type="java.lang.String" value="Fa&#xe7;a o seu ataque!!"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="jPlay1">
       <Properties>
         <Property name="text" type="java.lang.String" value="Realizar Jogada"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jPlay1ActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

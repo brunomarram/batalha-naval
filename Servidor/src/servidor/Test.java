@@ -1,12 +1,7 @@
 
 package servidor;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.lang.ClassNotFoundException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import model.Tabuleiro;
 
 /**
  * This class implements java Socket server
@@ -15,6 +10,11 @@ import java.net.Socket;
  */
 public class Test {
 
-
+    public static void main(String args[]) {
+        Tabuleiro tabuleiro = new Tabuleiro(2, 15, 2, 4);
+        tabuleiro.checkPlay(1, 'C');
+        System.out.println(tabuleiro.getMap());
+        System.out.println(tabuleiro.justView());
+    }
 
 }

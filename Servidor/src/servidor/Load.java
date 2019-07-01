@@ -17,11 +17,9 @@ public class Load {
             Socket cliente = server.accept();
 
             String response = servidor.listen(cliente);
-            servidor.write(cliente, response);
 
-            servidor.entrada.close();
-            servidor.saida.close();
-            cliente.close();
+            if(response != null)
+                servidor.write(cliente, response);
         }
     }
 }

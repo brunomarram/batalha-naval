@@ -8,7 +8,6 @@ package servidor;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Date;
 import java.util.Random;
 import model.Tabuleiro;
 
@@ -24,9 +23,10 @@ public class Servidor {
     private Tabuleiro jogador2;
     public ObjectInputStream entrada;
     public ObjectOutputStream saida;
+    private String currentPlayer;
     
     public String call(String method, String params, Socket cliente){
-        String response = "";
+        String response = null;
 
         try {
             switch(method) {
@@ -37,13 +37,13 @@ public class Servidor {
                     response = this.checkStatus(params);
                     break;
                 case "start":
-                    response = this.start(params, cliente);
+                    this.start(params, cliente);
                     break;
                 case "connect":
-                    response = this.connect(params, cliente);
+                    this.connect(params, cliente);
                     break;
                 case "play":
-                    response = this.play(params);
+                    this.play(params, cliente);
                     break;
             }
         } catch(Exception ex) {
@@ -69,30 +69,65 @@ public class Servidor {
         }
     }
 
-    private String connect(String params, Socket cliente) throws Exception{
-        if(this.jogador1 == null) {
-            return "Nenhum jogo iniciado";
-        } else {
-            this.jogador2 = new Tabuleiro(
-                this.jogador1.getShipSize(),
-                this.jogador1.getTabSize(),
-                this.jogador1.getNumberOfShips(),
-                this.jogador1.getTentatives()
-            );
-            this.cliente2 = cliente;
-            return this.jogador2.getMap();
-        }
+    private void connect(String params, Socket cliente) throws Exception{
+        this.jogador2 = new Tabuleiro(
+            this.jogador1.getShipSize(),
+            this.jogador1.getTabSize(),
+            this.jogador1.getNumberOfShips(),
+            this.jogador1.getTentatives()
+        );
+        this.cliente2 = cliente;
+        this.currentPlayer = "jogador1";
+        this.passPlay();
     }
 
-    private String play(String params) {
+    private void passPlay() throws Exception {
+        if(this.currentPlayer.equals("jogador1")) {
+            this.write(this.cliente1, "play");
+            this.write(this.cliente2, "wait");
+        } else {
+            this.write(this.cliente1, "wait");
+            this.write(this.cliente2, "play");
+        }
+
+        this.write(this.cliente1, Integer.toString(this.jogador1.getPoints()));
+        this.write(this.cliente1, Integer.toString(this.jogador1.getTentatives()));
+        this.write(this.cliente1, Integer.toString(this.jogador2.getPoints()));
+        this.write(this.cliente1, Integer.toString(this.jogador2.getTentatives()));
+        this.write(this.cliente1, this.jogador1.getMap());
+        this.write(this.cliente1, this.jogador2.justView());
+
+        this.write(this.cliente2, Integer.toString(this.jogador2.getPoints()));
+        this.write(this.cliente2, Integer.toString(this.jogador2.getTentatives()));
+        this.write(this.cliente2, Integer.toString(this.jogador1.getPoints()));
+        this.write(this.cliente2, Integer.toString(this.jogador1.getTentatives()));
+        this.write(this.cliente2, this.jogador2.getMap());
+        this.write(this.cliente2, this.jogador1.justView());
+    }
+
+    private void play(String params, Socket cliente) throws Exception{
         String[] data;
         data = params.split(",");
         int Y = Integer.parseInt(data[1]);
-        this.jogador1.checkPlay(data[0].charAt(0), Y);
-        return "";
+
+        if(this.currentPlayer.equals("jogador1")) {
+            boolean matched = this.jogador2.checkPlay(Y, data[0].charAt(0));
+            if(matched) this.jogador1.setPoints();
+            this.jogador1.setTentatives();
+            this.currentPlayer = "jogador2";
+            this.cliente1 = cliente;
+        } else {
+            boolean matched = this.jogador1.checkPlay(Y, data[0].charAt(0));
+            if(matched) this.jogador2.setPoints();
+            this.jogador2.setTentatives();
+            this.currentPlayer = "jogador1";
+            this.cliente2 = cliente;
+        }
+
+        this.passPlay();
     }
 
-    private String start(String params, Socket cliente) {
+    private void start(String params, Socket cliente) {
         String[] data;
         data = params.split(",");
         int shipSize = Integer.parseInt(data[0]);
@@ -101,7 +136,6 @@ public class Servidor {
         int tentatives = new Random().nextInt(numberOfShips*tabSize);
         this.jogador1 = new Tabuleiro(shipSize, tabSize, numberOfShips, tentatives);
         this.cliente1 = cliente;
-        return this.jogador1.getMap();
     }
     
     public String listen(Socket cliente) throws Exception {

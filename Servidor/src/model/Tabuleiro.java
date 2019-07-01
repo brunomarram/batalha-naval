@@ -34,7 +34,7 @@ public class Tabuleiro {
         while(count < this.numberOfShips) {
             int x = new Random().nextInt(tabSize);
             int y = new Random().nextInt(tabSize - shipSize);
-            if(this.jogo[x][y] == 0) {
+            if(y + shipSize <= tabSize && this.jogo[x][y] == 0) {
                 for(int i = y; i < y + shipSize; i++){
                     this.jogo[x][i] = 1;
                 }
@@ -54,10 +54,43 @@ public class Tabuleiro {
         this.generateGame();
     }
 
-    public void checkPlay(char line, int column) {
-        int X = 67 - line;
-        int Y =  column - 1;
-        this.jogoView[X][Y] = "X";
+    public void match(int line, char column) {
+        int Y = column - 65;
+        int X =  line - 1;
+
+        int count = 0;
+        for(int i = 0; i < this.shipSize; i++) {
+            if(X-i > 0 && this.jogoView[X-i][Y].equals("X")) count++;
+            else if(X+i < this.tabSize && this.jogoView[X+i][Y].equals("X")) count++;
+            else if(Y-i > 0 && this.jogoView[X][Y-i].equals("X")) count++;
+            else if(Y+i < this.tabSize && this.jogoView[X][Y+i].equals("X")) count++;
+        }
+        if(count == this.shipSize) points++;
+        System.out.println(count +","+ this.shipSize);
+    }
+
+    public boolean checkPlay(int line, char column) {
+        int Y = column - 65;
+        int X =  line - 1;
+        boolean matched = false;
+
+        if(this.jogo[X][Y] == 1) {
+            this.jogo[X][Y] = 2;
+            this.jogoView[X][Y] = "X";
+            int count = 0;
+            for(int i = 0; i < this.shipSize; i++) {
+                if(X-i > 0 && this.jogoView[X-i][Y].equals("X")) count++;
+                else if(X+i < this.tabSize && this.jogoView[X+i][Y].equals("X")) count++;
+                else if(Y-i > 0 && this.jogoView[X][Y-i].equals("X")) count++;
+                else if(Y+i < this.tabSize && this.jogoView[X][Y+i].equals("X")) count++;
+            }
+            if(count == this.shipSize) matched = true;
+        } else {
+            this.jogo[X][Y] = 3;
+            this.jogoView[X][Y] = "o";
+        }
+
+        return matched;
     }
 
     public String justView() {
@@ -96,5 +129,17 @@ public class Tabuleiro {
 
     public int getTentatives() {
         return tentatives;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setTentatives() {
+        this.tentatives--;
+    }
+
+    public void setPoints() {
+        this.points++;
     }
 }
