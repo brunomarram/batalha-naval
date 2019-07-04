@@ -28,7 +28,6 @@ public class Jogo extends javax.swing.JFrame {
     public Jogo() {
         initComponents();
         this.connectServer();
-        this.jNewGame.setEnabled(false);
         this.controlGame();
     }
 
@@ -49,11 +48,14 @@ public class Jogo extends javax.swing.JFrame {
         initComponents();
         this.createServer(shipSize, tabSize);
         this.block();        
-
-        this.jNewGame.setEnabled(false);
         this.controlGame();
     }
 
+    private void end() {
+        this.dispose();
+        System.exit(0);
+    }
+    
     public void controlGame() {
         try{
             String message = this.listen();
@@ -63,7 +65,14 @@ public class Jogo extends javax.swing.JFrame {
             } else if(message.equals("wait")){
                 this.block();                
             } else {
-                //Condições de parar o game
+                if(message.equals("player1wins")) {
+                    JOptionPane.showMessageDialog(rootPane, "Jogador 1 Venceu :)");
+                } else if(message.equals("player2wins")) {
+                    JOptionPane.showMessageDialog(rootPane, "Jogador 2 Venceu :)");
+                } else if(message.equals("draw")) {
+                    JOptionPane.showMessageDialog(rootPane, "Ocorreu um empate :/");
+                }
+                this.end();
             }
             
             String myPoints = this.listen();
@@ -112,7 +121,6 @@ public class Jogo extends javax.swing.JFrame {
         enemyPoints = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         enemyTentatives = new javax.swing.JLabel();
-        jNewGame = new javax.swing.JButton();
         jQuit = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLog = new javax.swing.JLabel();
@@ -258,13 +266,6 @@ public class Jogo extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jNewGame.setText("Iniciar Novo Jogo");
-        jNewGame.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jNewGameActionPerformed(evt);
-            }
-        });
-
         jQuit.setText("Sair do Jogo");
         jQuit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -291,19 +292,13 @@ public class Jogo extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPlay1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jPlay1)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jQuit))
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(77, 77, 77)
-                                .addComponent(jNewGame)
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(jQuit))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(92, 92, 92)
@@ -322,9 +317,7 @@ public class Jogo extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jNewGame)
-                        .addGap(57, 57, 57)
+                        .addGap(92, 92, 92)
                         .addComponent(jLog)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -342,7 +335,6 @@ public class Jogo extends javax.swing.JFrame {
     private void jQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jQuitActionPerformed
         try {
             this.send("reset:.");
-            this.listen();
             
             Inicio inicio = new Inicio();
             inicio.setVisible(true);
@@ -352,10 +344,6 @@ public class Jogo extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, ex.getMessage(), null, JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jQuitActionPerformed
-
-    private void jNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNewGameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jNewGameActionPerformed
 
     private void jPlay1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPlay1ActionPerformed
         try{
@@ -415,7 +403,6 @@ public class Jogo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLog;
-    private javax.swing.JButton jNewGame;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JButton jPlay1;

@@ -31,7 +31,7 @@ public class Servidor {
         try {
             switch(method) {
                 case "reset":
-                    response = this.reset(params);
+                    this.reset(params);
                     break;
                 case "checkStatus":
                     response = this.checkStatus(params);
@@ -53,12 +53,11 @@ public class Servidor {
         return response;
     }
 
-    private String reset(String params){
+    private void reset(String params) throws Exception{
         this.jogador1 = null;
         this.jogador2 = null;
         this.cliente1 = null;
         this.cliente2 = null;
-        return "";
     }
 
     private String checkStatus(String params){
@@ -81,7 +80,43 @@ public class Servidor {
         this.passPlay();
     }
 
+    private void writeAll(String message) throws Exception {
+        this.write(this.cliente1, message);
+        this.write(this.cliente2, message);
+        this.reset("");
+    }
+
+    private boolean checkWin() throws Exception {
+        boolean end = false;
+        int tentatives1 = this.jogador1.getTentatives();
+        int tentatives2 = this.jogador2.getTentatives();
+
+        int points1 = this.jogador1.getPoints();
+        int points2 = this.jogador2.getPoints();
+
+        if(tentatives1 == 0 && tentatives2 == 0) {
+            if(this.jogador1.getParts() > this.jogador2.getParts())
+                this.writeAll("player1wins");
+            else if(this.jogador2.getParts() > this.jogador1.getParts())
+                this.writeAll("player2wins");
+            else
+                this.writeAll("draw");
+            end = true;
+        } else if(points1 == this.jogador2.getNumberOfShips()) {
+            this.writeAll("player1wins");
+            end = true;
+        } else if(points2 == this.jogador1.getNumberOfShips()) {
+            this.writeAll("player2wins");
+            end = true;
+        }
+
+        return end;
+    }
+
     private void passPlay() throws Exception {
+
+        if(this.checkWin()) return;
+
         if(this.currentPlayer.equals("jogador1")) {
             this.write(this.cliente1, "play");
             this.write(this.cliente2, "wait");
@@ -111,14 +146,16 @@ public class Servidor {
         int Y = Integer.parseInt(data[1]);
 
         if(this.currentPlayer.equals("jogador1")) {
-            boolean matched = this.jogador2.checkPlay(Y, data[0].charAt(0));
-            if(matched) this.jogador1.setPoints();
+            boolean[] matched = this.jogador2.checkPlay(Y, data[0].charAt(0));
+            if(matched[0]) this.jogador1.setParts();
+            if(matched[1]) this.jogador1.setPoints();
             this.jogador1.setTentatives();
             this.currentPlayer = "jogador2";
             this.cliente1 = cliente;
         } else {
-            boolean matched = this.jogador1.checkPlay(Y, data[0].charAt(0));
-            if(matched) this.jogador2.setPoints();
+            boolean[] matched = this.jogador1.checkPlay(Y, data[0].charAt(0));
+            if(matched[0]) this.jogador2.setParts();
+            if(matched[1]) this.jogador2.setPoints();
             this.jogador2.setTentatives();
             this.currentPlayer = "jogador1";
             this.cliente2 = cliente;
@@ -132,8 +169,8 @@ public class Servidor {
         data = params.split(",");
         int shipSize = Integer.parseInt(data[0]);
         int tabSize = Integer.parseInt(data[1]);
-        int numberOfShips = new Random().nextInt(tabSize);
-        int tentatives = new Random().nextInt(numberOfShips*tabSize);
+        int numberOfShips = new Random().nextInt(2) + 1;
+        int tentatives = numberOfShips*shipSize*3;
         this.jogador1 = new Tabuleiro(shipSize, tabSize, numberOfShips, tentatives);
         this.cliente1 = cliente;
     }
